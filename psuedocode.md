@@ -3,7 +3,7 @@ For context, the data is single end RNAseq with Universal Molecular Identifiers 
 
 
 Functions:
-
+```
 
 def check_UMI(UMI):
     ''' checks if UMI is recognized given an UMI dictionary. if not, toss it'''
@@ -32,11 +32,12 @@ Example adust_seq_start(1S, 99, fwd); return 98
 
 return adjusted_pos
 example: adjust_seq_start(1S,99, fwd) return 98
+```
 psuedo:
 
 sort sam file before running
 
-
+```
 make UMI dictionary from file (96)
 
 open input SAM file and Ouput SAM file:
@@ -61,4 +62,4 @@ close file
 
 
 
-
+```
