@@ -92,10 +92,13 @@ if __name__ == "__main__":
 
     #print(len(umi_set))
     #open all files that will be used
-    with open(file, 'r') as fr, open(outfile, 'w') as fw, open('Duplicates_' + outfile, 'w') as dupefw:
+    with open(file, 'r') as fr, open(outfile, 'w') as fw, open(outfile + 'Duplicates' , 'w') as dupefw:
         
         #setting empty name
         prev_rname =''
+        dupes = 0
+        unique = 0
+        total = 0
         #read through all lines
         for line in fr:
                 if line.startswith("@"):
@@ -118,13 +121,22 @@ if __name__ == "__main__":
                             #remake the set an empty set at new chroms
                             rname_set = set()
                             rname_set.add((umi, position))
+                            unique +=1
                         
                         #write line dependent on umi and adjusted position being in set
-                        else: 
-                            if (umi, position) in rname_set:
-                                dupefw.write(line)
-                            else:
-                                rname_set.add((umi, position))
-                                fw.write(line)
+                        elif (umi, position) in rname_set: # type: ignore
+                            dupefw.write(line)
+                            dupes += 1
+                        else:
+                            rname_set.add((umi, position)) # type: ignore
+                            fw.write(line)
+                            unique +=1
+                    total +=1
+    
+    print(f'%Duplicates: {dupes/total*100}')
+    print(f'%Unique: {unique/total*100}')
+    print(f'Duplicates: {dupes}')
+    print(f'Unique: {unique}')
+    print(f'Total: {total}')
 
 
