@@ -92,7 +92,7 @@ if __name__ == "__main__":
 
     #print(len(umi_set))
     #open all files that will be used
-    with open(file, 'r') as fr, open(outfile, 'w') as fw, open(outfile + 'Duplicates' , 'w') as dupefw:
+    with open(file, 'r') as fr, open(outfile, 'w') as fw:
         
         #setting empty name
         prev_rname =''
@@ -103,16 +103,16 @@ if __name__ == "__main__":
         for line in fr:
                 if line.startswith("@"):
                     fw.write(line)
-                    dupefw.write(line)
                 
                 else:
                     #assign needed variables of each line. Position is calculated from line_list[5]-Cigar, line_list[3] position, line_list[4] flag (position)
                     line_list = line.strip().split()
+                    #print(line_list)
                     umi = line_list[0].split(':')
                     umi = umi[-1]
                     current_rname=line_list[2]
-                    position = adjust_pos_start(line_list[5],int(line_list[3]),int(line_list[4]))
-                    
+                    strandedness = check_flag(int(line_list[1]))
+                    position = adjust_pos_start(line_list[5],int(line_list[3]),int(line_list[1]))
                     #adding any non duplicate to a set
                     if umi in umi_set:
                         if prev_rname != current_rname:
@@ -120,15 +120,14 @@ if __name__ == "__main__":
                             fw.write(line)
                             #remake the set an empty set at new chroms
                             rname_set = set()
-                            rname_set.add((umi, position))
+                            rname_set.add((umi, position, strandedness, current_rname))
                             unique +=1
                         
                         #write line dependent on umi and adjusted position being in set
-                        elif (umi, position) in rname_set: # type: ignore
-                            dupefw.write(line)
+                        elif (umi, position, strandedness, current_rname) in rname_set: # type: ignore
                             dupes += 1
                         else:
-                            rname_set.add((umi, position)) # type: ignore
+                            rname_set.add((umi, position, strandedness, current_rname)) # type: ignore
                             fw.write(line)
                             unique +=1
                     total +=1

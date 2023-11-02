@@ -1,0 +1,12 @@
+Goals can be seen in psuedo code:
+
+bash commands:
+samtools sort file.sam -o file_sorted.sam --PG
+
+adds header line containing sort command without --PG
+
+grep -v "^@" Dataset_tests/Deduped_C1.sam | cut -f3 | sort | uniq -c > stats.txt
+
+grep -v "^@" Dataset_tests/Deduped_C1.sam | cut -f3 | sort | wc -l
+
+grep -c "^@" Dataset_tests/Deduped_C1.sam 
